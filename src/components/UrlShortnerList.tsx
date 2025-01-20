@@ -71,7 +71,7 @@ export const UrlShortnerList = () => {
                           ? import.meta.env.VITE_SHORT_URL_PREFIX + url.shortUrl
                           : ""}
                       </Box>
-                      <Box>{url.fullUrl}</Box>
+                      <Box sx={{ opacity: 0.6 }}>{url.fullUrl}</Box>
                     </TableCell>
                     <TableCell align="left">
                       <TimeTooltip timeString={url.creationDate} />
