@@ -1,4 +1,4 @@
-export const isUrlValid = (url: string) => {
+export const isLongUrlValid = (url: string) => {
   const urlPattern = new RegExp(
     "^(https?:\\/\\/)?" + // validate protocol
       "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // validate domain name
@@ -9,6 +9,11 @@ export const isUrlValid = (url: string) => {
     "i"
   );
   return !!urlPattern.test(url);
+};
+
+export const isShortUrlValid = (url: string) => {
+  const urlPattern = /^[a-zA-Z]+(-[a-zA-Z]+)*$/;
+  return !url.trim() || !!urlPattern.test(url);
 };
 
 export const extractPathOrDomain = (url: string) => {
@@ -28,4 +33,8 @@ export const extractPathOrDomain = (url: string) => {
     console.error("Invalid URL:", errorMessage);
     return "";
   }
+};
+
+export const formatShortUrl = (url: string) => {
+  return url.trim().toLowerCase().replace(/\s+/g, "-");
 };

@@ -1,3 +1,4 @@
+import { FormEvent, useState } from "react";
 import {
   Alert,
   Box,
@@ -8,8 +9,12 @@ import {
   InputLabel,
   Snackbar,
 } from "@mui/material";
-import { useState } from "react";
-import { isUrlValid, extractPathOrDomain } from "../utils";
+import {
+  isLongUrlValid,
+  isShortUrlValid,
+  extractPathOrDomain,
+  formatShortUrl,
+} from "../utils";
 import { useShortUrlContext } from "../context/ShortUrlContext";
 
 export const UrlShortenerInputs = () => {
@@ -20,16 +25,24 @@ export const UrlShortenerInputs = () => {
 
   const inputStyle = { bgcolor: "#FFFFFF", minWidth: "500px" };
 
-  const handleUrlCreation = () => {
+  const handleUrlCreation = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     if (!longUrl) pushAlert("Provide URL for generation", "warning");
 
-    if (longUrl && !isUrlValid(longUrl))
-      pushAlert("Provided data is not a valid URL", "warning");
+    const isLongValid = isLongUrlValid(longUrl);
+    if (!isLongValid) pushAlert("Provided URL is not a valid URL", "warning");
 
-    if (longUrl && isUrlValid(longUrl)) {
+    const formattedShort = formatShortUrl(shortUrl);
+    const isShortValid = isShortUrlValid(formattedShort);
+    if (!isShortValid) pushAlert("Short URL is not a valid URL", "warning");
+
+    if (isLongValid && isShortValid) {
       createShortUrl({
         fullUrl: longUrl,
-        shortUrl: shortUrl?.trim() ? shortUrl : extractPathOrDomain(longUrl),
+        shortUrl: formattedShort
+          ? formattedShort
+          : extractPathOrDomain(longUrl),
       });
       setLongUrl("");
       setShortUrl("");
@@ -58,7 +71,7 @@ export const UrlShortenerInputs = () => {
           {alert.message}
         </Alert>
       </Snackbar>
-      <Container>
+      <Container component="form" onSubmit={handleUrlCreation}>
         <InputLabel sx={{ color: "#FFFFFF" }}>
           Enter the URL you want to shorten
         </InputLabel>
@@ -83,11 +96,7 @@ export const UrlShortenerInputs = () => {
           onChange={(e) => setShortUrl(e.target.value)}
         />
         <Box sx={{ mt: 3 }}>
-          <Button
-            variant="contained"
-            disabled={isCreating}
-            onClick={handleUrlCreation}
-          >
+          <Button variant="contained" disabled={isCreating} type="submit">
             Create Short URL
           </Button>
         </Box>
