@@ -22,20 +22,20 @@ export const UrlShortenerInputs = () => {
     useShortUrlContext();
   const [longUrl, setLongUrl] = useState<string>("");
   const [shortUrl, setShortUrl] = useState<string>("");
-
   const inputStyle = { bgcolor: "#FFFFFF", minWidth: "500px" };
 
   const handleUrlCreation = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!longUrl) pushAlert("Provide URL for generation", "warning");
+    console.log(!longUrl);
+    if (!longUrl) return pushAlert("Provide URL for generation", "info");
 
     const isLongValid = isLongUrlValid(longUrl);
-    if (!isLongValid) pushAlert("Provided URL is not a valid URL", "warning");
+    if (!isLongValid)
+      return pushAlert("Provided URL is not a valid URL", "warning");
 
     const formattedShort = formatShortUrl(shortUrl);
     const isShortValid = isShortUrlValid(formattedShort);
-    if (!isShortValid) pushAlert("Short URL is not a valid URL", "warning");
+    if (!isShortValid) return pushAlert("Short URL is invalid", "error");
 
     if (isLongValid && isShortValid) {
       createShortUrl({
