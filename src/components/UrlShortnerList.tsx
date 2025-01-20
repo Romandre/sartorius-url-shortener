@@ -107,7 +107,7 @@ const TableToolbar = () => {
         <Typography sx={{ mr: 2 }}>Items per page</Typography>
         <Select
           value={pageSize}
-          onChange={(e) => changePageSize(e.target.value)}
+          onChange={(e) => changePageSize(e.target.value as number)}
         >
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={25}>25</MenuItem>
@@ -178,7 +178,7 @@ const PaginationItems: React.FC<{
         bgcolor: page === activePage ? "primary.main" : "",
         cursor: "pointer",
       }}
-      onClick={() => setPage(page)}
+      onClick={() => setPage(page as number)}
     >
       {children}
     </Typography>

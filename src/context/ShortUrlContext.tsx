@@ -1,36 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { shortUrlApi } from "../api/shortUrlApi";
+import { AlertColor } from "@mui/material";
 import {
-  ShortUrl,
   ShortUrlCreationRequest,
   ShortUrlSearchResponse,
+  ShortUrlContextType,
+  Alert,
 } from "../types";
-
-interface Alert {
-  isOpen: boolean;
-  message: string;
-  type?: string;
-}
-
-interface ShortUrlContextType {
-  urls: ShortUrl[];
-  totalHits: number;
-  searchTerm: string;
-  page: number;
-  pageSize: number;
-  isLoading: boolean;
-  error: Error | null;
-  isCreating: boolean;
-  createError: Error | null;
-  alert: Alert;
-  handelSearch: (term: string) => void;
-  setPage: (page: number) => void;
-  changePageSize: (size: number) => void;
-  createShortUrl: (data: ShortUrlCreationRequest) => Promise<void>;
-  pushAlert: (message: string, type: string) => void;
-  resetAlert: () => void;
-}
 
 const ShortUrlContext = createContext<ShortUrlContextType | null>(null);
 
@@ -82,7 +59,7 @@ export const ShortUrlProvider: React.FC<{ children: React.ReactNode }> = ({
     setSearchTerm(term);
   };
 
-  const pushAlert = (message: string, type?: string) => {
+  const pushAlert = (message: string, type?: AlertColor) => {
     setAlert({ isOpen: true, message, type });
   };
 
@@ -121,5 +98,5 @@ export const useShortUrlContext = () => {
   if (context === undefined) {
     throw new Error("useShortUrl must be used within a ShortUrlProvider");
   }
-  return context;
+  return context as ShortUrlContextType;
 };

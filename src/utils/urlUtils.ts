@@ -18,13 +18,14 @@ export const extractPathOrDomain = (url: string) => {
 
     if (path && path !== "/") {
       const segments = path.split("/").filter((segment) => segment.length > 0);
-      return segments.pop();
+      return segments.pop() as string;
     } else {
       const mainDomain = parsedUrl.hostname.split(".").slice(0, -1).join("-");
       return mainDomain;
     }
   } catch (error: unknown) {
-    console.error("Invalid URL:", error.message);
-    return null;
+    const errorMessage = (error as Error).message || "Unknown error";
+    console.error("Invalid URL:", errorMessage);
+    return "";
   }
 };
