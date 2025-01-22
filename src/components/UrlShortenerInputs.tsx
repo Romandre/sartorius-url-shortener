@@ -26,7 +26,6 @@ export const UrlShortenerInputs = () => {
 
   const handleUrlCreation = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(!longUrl);
     if (!longUrl) return pushAlert("Provide URL for generation", "info");
 
     const isLongValid = isLongUrlValid(longUrl);
